@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/alertas-prazo?token=lexia-cron-2025",
+      "schedule": "0 8 * * *"
+    }
+  ]
+}

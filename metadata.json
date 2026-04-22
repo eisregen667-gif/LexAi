@@ -1,0 +1,5 @@
+{
+  "name": "PharmaPrime Mobile",
+  "description": "A mobile-first e-commerce PWA for pharmaceutical products with Supabase backend and Mercado Pago integration flow.",
+  "requestFramePermissions": []
+}

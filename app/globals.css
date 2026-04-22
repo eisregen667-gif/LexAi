@@ -1,0 +1,153 @@
+/* app/globals.css */
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── CSS Variables ──────────────────────────────────────────────────────────── */
+:root {
+  --font-playfair: "Playfair Display", Georgia, serif;
+  --font-dm-sans: "DM Sans", system-ui, sans-serif;
+
+  /* Scrollbar customizada */
+  --scrollbar-track: #0D1117;
+  --scrollbar-thumb: #29334A;
+  --scrollbar-thumb-hover: #3A4560;
+}
+
+/* ─── Base ───────────────────────────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #080A0F;
+  color: #E2E7F0;
+  font-family: var(--font-dm-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
+
+/* ─── Tipografia ─────────────────────────────────────────────────────────────── */
+.font-display { font-family: var(--font-playfair); }
+
+h1, h2, h3 { font-family: var(--font-playfair); }
+
+/* ─── Componentes reutilizáveis ──────────────────────────────────────────────── */
+@layer components {
+
+  /* Cartões com borda sutil */
+  .card {
+    @apply bg-ink-800 border border-ink-700 rounded-xl p-6;
+  }
+
+  .card-sm {
+    @apply bg-ink-800 border border-ink-700 rounded-lg p-4;
+  }
+
+  /* Botão primário — dourado */
+  .btn-primary {
+    @apply bg-gold-500 hover:bg-gold-400 text-ink-950 font-semibold
+           px-5 py-2.5 rounded-lg transition-all duration-200
+           disabled:opacity-50 disabled:cursor-not-allowed
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400;
+  }
+
+  /* Botão secundário — contorno */
+  .btn-secondary {
+    @apply bg-transparent hover:bg-ink-700 text-ink-100 border border-ink-600
+           font-medium px-5 py-2.5 rounded-lg transition-all duration-200
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-500;
+  }
+
+  /* Botão ghost */
+  .btn-ghost {
+    @apply bg-transparent hover:bg-ink-800 text-ink-300 hover:text-ink-100
+           font-medium px-4 py-2 rounded-lg transition-all duration-200;
+  }
+
+  /* Input base */
+  .input-base {
+    @apply bg-ink-900 border border-ink-700 text-ink-100 placeholder:text-ink-500
+           rounded-lg px-4 py-2.5 w-full transition-colors duration-200
+           focus:outline-none focus:border-gold-500 focus:ring-1 focus:ring-gold-500/30;
+  }
+
+  /* Badge */
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  /* Divider */
+  .divider {
+    @apply border-t border-ink-700 my-6;
+  }
+
+  /* Glow effect dourado */
+  .glow-gold {
+    box-shadow: 0 0 20px rgba(201, 168, 76, 0.15), 0 0 60px rgba(201, 168, 76, 0.05);
+  }
+
+  /* Textura sutil de fundo */
+  .bg-texture {
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(201, 168, 76, 0.03) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(41, 51, 74, 0.4) 0%, transparent 50%);
+  }
+}
+
+/* ─── Animações personalizadas ───────────────────────────────────────────────── */
+@layer utilities {
+  .animation-delay-100 { animation-delay: 100ms; }
+  .animation-delay-200 { animation-delay: 200ms; }
+  .animation-delay-300 { animation-delay: 300ms; }
+  .animation-delay-400 { animation-delay: 400ms; }
+  .animation-delay-500 { animation-delay: 500ms; }
+
+  .animate-fade-in {
+    animation: fadeIn 0.4s ease forwards;
+    opacity: 0;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Markdown no chat ───────────────────────────────────────────────────────── */
+.prose-chat {
+  @apply text-ink-200 leading-relaxed;
+}
+
+.prose-chat p          { @apply mb-3 last:mb-0; }
+.prose-chat strong     { @apply text-ink-50 font-semibold; }
+.prose-chat ul         { @apply list-disc list-inside mb-3 space-y-1; }
+.prose-chat ol         { @apply list-decimal list-inside mb-3 space-y-1; }
+.prose-chat li         { @apply text-ink-200; }
+.prose-chat code       { @apply bg-ink-900 text-gold-300 px-1 py-0.5 rounded text-sm font-mono; }
+.prose-chat blockquote { @apply border-l-2 border-gold-500/50 pl-4 italic text-ink-300 my-3; }
+.prose-chat h3         { @apply text-ink-100 font-semibold mt-4 mb-2; }
