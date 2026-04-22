@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 "use client";
 import { useState } from "react";
 import Link from "next/link";
@@ -6,13 +8,13 @@ import { Scale, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 export default function CadastroPage() {
-  const router = useRouter();
+  const router   = useRouter();
   const supabase = createClient();
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+  const [nome,    setNome]    = useState("");
+  const [email,   setEmail]   = useState("");
+  const [senha,   setSenha]   = useState("");
   const [loading, setLoading] = useState(false);
-  const [erro, setErro] = useState<string | null>(null);
+  const [erro,    setErro]    = useState<string | null>(null);
 
   async function handleCadastro(e: React.FormEvent) {
     e.preventDefault();
@@ -42,15 +44,18 @@ export default function CadastroPage() {
           <form onSubmit={handleCadastro} className="space-y-4">
             <div>
               <label className="block text-sm text-ink-300 mb-1.5">Nome completo</label>
-              <input type="text" className="input-base" placeholder="Dr. João Silva" value={nome} onChange={e => setNome(e.target.value)} required />
+              <input type="text" className="input-base" placeholder="Dr. João Silva"
+                value={nome} onChange={e => setNome(e.target.value)} required />
             </div>
             <div>
               <label className="block text-sm text-ink-300 mb-1.5">E-mail</label>
-              <input type="email" className="input-base" placeholder="seu@email.com" value={email} onChange={e => setEmail(e.target.value)} required />
+              <input type="email" className="input-base" placeholder="seu@email.com"
+                value={email} onChange={e => setEmail(e.target.value)} required />
             </div>
             <div>
               <label className="block text-sm text-ink-300 mb-1.5">Senha</label>
-              <input type="password" className="input-base" placeholder="Mínimo 8 caracteres" value={senha} onChange={e => setSenha(e.target.value)} required />
+              <input type="password" className="input-base" placeholder="Mínimo 8 caracteres"
+                value={senha} onChange={e => setSenha(e.target.value)} required />
             </div>
             {erro && <div className="bg-danger/10 border border-danger/30 text-danger rounded-lg px-4 py-3 text-sm">{erro}</div>}
             <button type="submit" className="btn-primary w-full flex items-center justify-center gap-2" disabled={loading}>
