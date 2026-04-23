@@ -1,13 +1,14 @@
 "use client";
 export const dynamic = 'force-dynamic'
 
+import { Suspense } from "react";
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Scale, Eye, EyeOff, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
-export default function LoginPage() {
+function LoginForm() {
   const router   = useRouter();
   const params   = useSearchParams();
   const supabase = createClient();
@@ -29,6 +30,42 @@ export default function LoginPage() {
   }
 
   return (
+    <form onSubmit={handleLogin} className="space-y-4">
+      <div>
+        <label className="block text-sm text-ink-300 mb-1.5" htmlFor="email">E-mail</label>
+        <input id="email" type="email" className="input-base" placeholder="seu@email.com.br"
+          value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" />
+      </div>
+      <div>
+        <label className="block text-sm text-ink-300 mb-1.5" htmlFor="senha">Senha</label>
+        <div className="relative">
+          <input id="senha" type={mostrar ? "text" : "password"} className="input-base pr-12"
+            placeholder="••••••••" value={senha} onChange={(e) => setSenha(e.target.value)}
+            required autoComplete="current-password" />
+          <button type="button" onClick={() => setMostrar((v) => !v)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-500 hover:text-ink-300 transition-colors">
+            {mostrar ? <EyeOff size={16} /> : <Eye size={16} />}
+          </button>
+        </div>
+      </div>
+      {erro && <div className="bg-danger/10 border border-danger/30 text-danger rounded-lg px-4 py-3 text-sm">{erro}</div>}
+      <button type="submit" className="btn-primary w-full justify-center flex items-center gap-2 mt-2" disabled={loading}>
+        {loading && <Loader2 size={16} className="animate-spin" />}
+        {loading ? "Entrando..." : "Entrar"}
+      </button>
+    </form>
+  );
+}
+
+function traduzirErro(msg: string): string {
+  if (msg.includes("Invalid login credentials")) return "E-mail ou senha incorretos.";
+  if (msg.includes("Email not confirmed"))       return "Confirme seu e-mail antes de entrar.";
+  if (msg.includes("Too many requests"))         return "Muitas tentativas. Aguarde alguns minutos.";
+  return "Erro ao entrar. Tente novamente.";
+}
+
+export default function LoginPage() {
+  return (
     <div className="min-h-screen bg-ink-950 bg-texture flex items-center justify-center px-6">
       <div className="w-full max-w-md animate-slide-up">
         <div className="text-center mb-8">
@@ -42,30 +79,9 @@ export default function LoginPage() {
           <p className="text-ink-400 mt-2 text-sm">Entre na sua conta para continuar</p>
         </div>
         <div className="card">
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label className="block text-sm text-ink-300 mb-1.5" htmlFor="email">E-mail</label>
-              <input id="email" type="email" className="input-base" placeholder="seu@email.com.br"
-                value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" />
-            </div>
-            <div>
-              <label className="block text-sm text-ink-300 mb-1.5" htmlFor="senha">Senha</label>
-              <div className="relative">
-                <input id="senha" type={mostrar ? "text" : "password"} className="input-base pr-12"
-                  placeholder="••••••••" value={senha} onChange={(e) => setSenha(e.target.value)}
-                  required autoComplete="current-password" />
-                <button type="button" onClick={() => setMostrar((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-500 hover:text-ink-300 transition-colors">
-                  {mostrar ? <EyeOff size={16} /> : <Eye size={16} />}
-                </button>
-              </div>
-            </div>
-            {erro && <div className="bg-danger/10 border border-danger/30 text-danger rounded-lg px-4 py-3 text-sm">{erro}</div>}
-            <button type="submit" className="btn-primary w-full justify-center flex items-center gap-2 mt-2" disabled={loading}>
-              {loading && <Loader2 size={16} className="animate-spin" />}
-              {loading ? "Entrando..." : "Entrar"}
-            </button>
-          </form>
+          <Suspense fallback={<div className="text-ink-400 text-sm">Carregando...</div>}>
+            <LoginForm />
+          </Suspense>
           <div className="divider" />
           <p className="text-center text-sm text-ink-400">
             Não tem conta?{" "}
@@ -75,11 +91,4 @@ export default function LoginPage() {
       </div>
     </div>
   );
-}
-
-function traduzirErro(msg: string): string {
-  if (msg.includes("Invalid login credentials")) return "E-mail ou senha incorretos.";
-  if (msg.includes("Email not confirmed"))       return "Confirme seu e-mail antes de entrar.";
-  if (msg.includes("Too many requests"))         return "Muitas tentativas. Aguarde alguns minutos.";
-  return "Erro ao entrar. Tente novamente.";
 }
